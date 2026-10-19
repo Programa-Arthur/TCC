@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Administração | ExpeRT</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <style>
+    * { box-sizing: border-box; }
+    :root { font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif; color: #1b315f; background: #f4f7fb; }
+    body { min-height: 100vh; margin: 0; background: linear-gradient(180deg, #eaf1fb 0, #f4f7fb 260px); }
+    .admin-header { display: flex; align-items: center; justify-content: space-between; min-height: 80px; padding: 0 2rem; background: #12347a; box-shadow: 0 4px 16px #12347a2b; }
+    .admin-brand { display: block; width: 145px; height: 62px; object-fit: contain; }
+    .admin-header-actions { display: flex; align-items: center; gap: 12px; }
+    .admin-back { display: inline-flex; align-items: center; gap: 9px; padding: 8px 18px; border: 1px solid #ffffff70; border-radius: 999px; color: #fff; background: #ffffff16; font-size: .9rem; font-weight: 600; text-decoration: none; transition: background-color .18s ease, border-color .18s ease; }
+    .admin-back:hover { color: #12347a; background: #fff; border-color: #fff; }
+    .admin-back:focus-visible, button:focus-visible, input:focus-visible { outline: 3px solid #8bb5ff; outline-offset: 3px; }
+    main { width: min(1100px, 100% - 40px); margin: 42px auto; }
+    .card { margin-bottom: 22px; padding: 28px; border: 1px solid #dce5f0; border-radius: 18px; background: #fff; box-shadow: 0 8px 28px #1b315f12; }
+    #loginCard { max-width: 540px; margin: min(9vh, 90px) auto; border-top: 4px solid #3478d4; }
+    h1, h2 { margin: 0 0 10px; color: #12347a; line-height: 1.25; }
+    h1 { font-size: clamp(1.5rem, 3vw, 1.9rem); }
+    h2 { font-size: 1.3rem; }
+    p { line-height: 1.6; }
+    label { display: block; margin: 20px 0 8px; font-size: .94rem; font-weight: 700; }
+    input { display: block; width: 100%; padding: 13px 14px; border: 1px solid #cbd5e1; border-radius: 10px; color: #1b315f; background: #fbfdff; font: inherit; }
+    input:focus { border-color: #3478d4; box-shadow: 0 0 0 4px #3478d426; outline: 0; }
+    button { margin: 12px 8px 0 0; padding: 11px 18px; border: 0; border-radius: 10px; color: #fff; background: #2864b5; font: inherit; font-weight: 700; cursor: pointer; transition: background-color .18s ease, box-shadow .18s ease; }
+    button:hover { background: #1c4e98; box-shadow: 0 4px 12px #12347a24; }
+    button.secondary { color: #12347a; background: #eaf1fb; }
+    button.secondary:hover { background: #dce8f8; box-shadow: none; }
+    .message { min-height: 1.2em; margin-bottom: 0; color: #b42318; }
+    .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; }
+    .stat { padding: 18px; border: 1px solid #e1eaf5; border-radius: 13px; color: #52627a; background: #f6f9fe; font-size: .92rem; font-weight: 600; }
+    .stat strong { display: block; margin-top: 8px; color: #12347a; font-size: 2rem; line-height: 1; }
+    .stat strong[hidden] { display: none; }
+    .stat .count-toggle { margin: 12px 0 0; padding: 8px 10px; font-size: .78rem; }
+    .table-wrap { overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 12px; }
+    table { width: 100%; border-collapse: collapse; min-width: 600px; background: #fff; }
+    th, td { padding: 13px 14px; border-bottom: 1px solid #e8edf4; text-align: left; }
+    th { color: #12347a; background: #f2f6fc; font-size: .88rem; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:hover { background: #f8fbff; }
+    .hidden { display: none; }
+    .muted { margin: 0; color: #64748b; }
+    .admin-theme-toggle { display: inline-flex; width: 42px; height: 42px; align-items: center; justify-content: center; margin: 0; padding: 0; border: 1px solid #ffffff70; border-radius: 50%; color: #ffd43b; background: #ffffff16; font-size: 1.15rem; }
+    .admin-theme-toggle:hover { background: #ffffff30; }
+    .admin-theme-toggle i { transition: transform 420ms cubic-bezier(.2,.8,.2,1); }
+    .admin-theme-toggle .bi-moon-stars-fill { transform: rotate(-18deg) scale(.92); }
+    .admin-theme-toggle .bi-brightness-high-fill { transform: rotate(180deg) scale(1.08); }
+    :root[data-theme="dark"] { color: #c5d8f7; background: #041443; color-scheme: dark; }
+    :root[data-theme="dark"] body { background: linear-gradient(180deg, #081943 0, #041443 260px); }
+    :root[data-theme="dark"] .admin-header { background: #05104e; box-shadow: 0 4px 16px #0005; }
+    :root[data-theme="dark"] .card { border-color: #153366; background: #07123b; box-shadow: 0 8px 28px #0003; }
+    :root[data-theme="dark"] h1,
+    :root[data-theme="dark"] h2,
+    :root[data-theme="dark"] .stat strong { color: #c3d5f1; }
+    :root[data-theme="dark"] .muted { color: #b6c5dc; }
+    :root[data-theme="dark"] input { border-color: #294471; color: #e3edff; background: #0b1b43; }
+    :root[data-theme="dark"] button.secondary { color: #d4e2fa; background: #142b55; }
+    :root[data-theme="dark"] button.secondary:hover { background: #1b396c; }
+    :root[data-theme="dark"] .stat { border-color: #203d6c; color: #b6c5dc; background: #0b1b43; }
+    :root[data-theme="dark"] .table-wrap { border-color: #203d6c; }
+    :root[data-theme="dark"] table { background: #07123b; }
+    :root[data-theme="dark"] th,
+    :root[data-theme="dark"] td { border-bottom-color: #20365d; }
+    :root[data-theme="dark"] th { color: #c3d5f1; background: #10234a; }
+    :root[data-theme="dark"] tbody tr:hover { background: #10234a; }
+    @media (prefers-reduced-motion: reduce) { .admin-theme-toggle i { transition: none; } }
+    @media (max-width: 600px) {
+      .admin-header { min-height: 80px; padding: 0 16px; }
+      .admin-brand { width: 118px; height: 52px; }
+      .admin-header-actions { gap: 8px; }
+      .admin-back { gap: 6px; padding: 8px 12px; font-size: .82rem; }
+      main { width: calc(100% - 28px); margin: 24px auto; }
+      .card { padding: 21px; border-radius: 15px; }
+    }
+  </style>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
+<body>
+<header class="admin-header"><a href="index.html" aria-label="ExpeRT, página inicial"><img class="admin-brand" src="imagens/logo.png" alt="ExpeRT Plataforma"></a><nav class="admin-header-actions" aria-label="Navegação"><a class="admin-back" href="index.html"><i class="bi bi-arrow-left" aria-hidden="true"></i> Voltar ao início</a><button class="admin-theme-toggle" id="themeToggle" type="button" aria-label="Ativar tema escuro" title="Alternar tema"><i class="bi bi-moon-stars-fill" id="themeIcon" aria-hidden="true"></i></button></nav></header>
+<main>
+  <section class="card" id="loginCard">
+    <h1>Acesso administrativo</h1>
+    <p class="muted">Área restrita aos administradores da plataforma.</p>
+    <form id="adminLoginForm">
+      <label for="adminPassword">Senha administrativa</label>
+      <input id="adminPassword" type="password" autocomplete="current-password" required>
+      <button type="submit">Entrar</button>
+      <p class="message" id="loginMessage" role="alert"></p>
+    </form>
+  </section>
+  <section id="dashboard" class="hidden">
+    <div class="card">
+      <h1>Painel administrativo</h1>
+      <p class="muted">Contas cadastradas. Acessos sem conta não aparecem nas tabelas.</p>
+      <button class="secondary" id="refreshButton">Atualizar dados</button>
+      <button id="logoutButton">Sair</button>
+      <p class="message" id="dashboardMessage" role="status"></p>
+    </div>
+    <div class="card stats">
+      <div class="stat">Total de contas<strong id="totalUsers">0</strong></div>
+      <div class="stat">Docentes<strong id="totalTeachers">0</strong></div>
+      <div class="stat">Discentes<strong id="totalStudents">0</strong></div>
+      <div class="stat">Outros<strong id="totalOthers">0</strong></div>
+      <div class="stat">Docentes com instituição<strong id="totalInstitutions">0</strong></div>
+      <div class="stat">Cliques no link para baixar o projeto<button class="secondary count-toggle" id="downloadCountToggle" type="button" aria-expanded="false" aria-controls="downloadClicks">Mostrar total</button><strong id="downloadClicks" hidden>0</strong></div>
+    </div>
+    <div id="tables"></div>
+  </section>
+</main>
+<script>
+  const themeToggleBtn = document.getElementById('themeToggle');
+  const themeIcon = document.getElementById('themeIcon');
+  const htmlElement = document.documentElement;
+  function applyTheme(theme) {
+    htmlElement.setAttribute('data-theme', theme);
+    themeIcon.className = theme === 'dark' ? 'bi bi-brightness-high-fill' : 'bi bi-moon-stars-fill';
+    themeToggleBtn.setAttribute('aria-label', theme === 'dark' ? 'Ativar tema claro' : 'Ativar tema escuro');
+  }
+  try {
+    applyTheme(localStorage.getItem('expert_theme') || 'light');
+    themeToggleBtn.addEventListener('click', () => {
+      const nextTheme = htmlElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      applyTheme(nextTheme);
+      localStorage.setItem('expert_theme', nextTheme);
+    });
+  } catch (error) {
+    applyTheme('light');
+  }
+
+  let adminToken = '';
+  const loginCard = document.getElementById('loginCard');
+  const dashboard = document.getElementById('dashboard');
+  const loginMessage = document.getElementById('loginMessage');
+  const dashboardMessage = document.getElementById('dashboardMessage');
+  const groups = [
+    { type: 'docente', title: 'Docentes' },
+    { type: 'discente', title: 'Discentes' },
+    { type: 'outro', title: 'Outros' }
+  ];
+
+  document.getElementById('adminLoginForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    loginMessage.textContent = '';
+    try {
+      const response = await fetch('/api/admin/login', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: document.getElementById('adminPassword').value })
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.mensagem || 'Não foi possível entrar.');
+      adminToken = data.token;
+      loginCard.classList.add('hidden');
+      dashboard.classList.remove('hidden');
+      await loadUsers();
+    } catch (error) { loginMessage.textContent = error.message || 'Erro de conexão com o servidor.'; }
+  });
+
+  async function loadUsers() {
+    dashboardMessage.textContent = '';
+    try {
+      const response = await fetch('/api/admin/users', { headers: { Authorization: `Bearer ${adminToken}` } });
+      const data = await response.json();
+      if (!response.ok) {
+        if (response.status === 401) logout();
+        throw new Error(data.mensagem || 'Não foi possível carregar os usuários.');
+      }
+      document.getElementById('totalUsers').textContent = data.total;
+      document.getElementById('totalTeachers').textContent = data.docentes;
+      document.getElementById('totalStudents').textContent = data.discentes;
+      document.getElementById('totalOthers').textContent = data.outros;
+      document.getElementById('totalInstitutions').textContent = data.docentesComInstituicao;
+      document.getElementById('downloadClicks').textContent = data.downloadClicks ?? 0;
+      const container = document.getElementById('tables');
+      container.replaceChildren();
+      for (const group of groups) {
+        const card = document.createElement('section');
+        card.className = 'card';
+        const heading = document.createElement('h2');
+        heading.textContent = `${group.title} (${data[group.type === 'docente' ? 'docentes' : group.type === 'discente' ? 'discentes' : 'outros']})`;
+        card.appendChild(heading);
+        const wrap = document.createElement('div');
+        wrap.className = 'table-wrap';
+        const table = document.createElement('table');
+        const thead = document.createElement('thead');
+        const headRow = document.createElement('tr');
+        for (const label of ['Nome', 'E-mail', 'Instituição', 'Data de cadastro']) {
+          const th = document.createElement('th'); th.textContent = label; headRow.appendChild(th);
+        }
+        thead.appendChild(headRow); table.appendChild(thead);
+        const tbody = document.createElement('tbody');
+        const users = data.users.filter((user) => user.type === group.type);
+        if (!users.length) {
+          const row = document.createElement('tr'); const cell = document.createElement('td');
+          cell.colSpan = 4; cell.textContent = 'Nenhuma conta cadastrada nesta categoria.';
+          row.appendChild(cell); tbody.appendChild(row);
+        }
+        for (const user of users) {
+          const row = document.createElement('tr');
+          const institution = group.type === 'docente' && user.institution?.linked ? user.institution.name : '—';
+          const values = [user.name || '—', user.email || '—', institution,
+            user.createdAt ? new Date(user.createdAt).toLocaleString('pt-BR') : '—'];
+          for (const value of values) { const cell = document.createElement('td'); cell.textContent = value; row.appendChild(cell); }
+          tbody.appendChild(row);
+        }
+        table.appendChild(tbody); wrap.appendChild(table); card.appendChild(wrap); container.appendChild(card);
+      }
+    } catch (error) { dashboardMessage.textContent = error.message || 'Erro ao carregar os dados.'; }
+  }
+  function logout() {
+    adminToken = ''; dashboard.classList.add('hidden'); loginCard.classList.remove('hidden');
+    document.getElementById('adminPassword').value = ''; document.getElementById('tables').replaceChildren();
+    document.getElementById('downloadClicks').hidden = true;
+    const countToggle = document.getElementById('downloadCountToggle');
+    countToggle.textContent = 'Mostrar total';
+    countToggle.setAttribute('aria-expanded', 'false');
+  }
+  document.getElementById('downloadCountToggle').addEventListener('click', () => {
+    const count = document.getElementById('downloadClicks');
+    count.hidden = !count.hidden;
+    const isVisible = !count.hidden;
+    const button = document.getElementById('downloadCountToggle');
+    button.textContent = isVisible ? 'Ocultar total' : 'Mostrar total';
+    button.setAttribute('aria-expanded', String(isVisible));
+  });
+  document.getElementById('refreshButton').addEventListener('click', loadUsers);
+  document.getElementById('logoutButton').addEventListener('click', logout);
+</script>
+</body>
+</html>
